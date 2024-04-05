@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صدور فاکتور</title>
+    <!-- اضافه کردن فایل‌های CSS بوت استرپ -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* استایل‌های خاص شما */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: right; /* تنظیم راست‌چین برای تمامی متن‌ها */
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: .5rem;
+            color: #333;
+            text-align: right; /* تنظیم راست‌چین برای برچسب‌ها */
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        button[type="submit"] {
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        /* استایل جدول فاکتور */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .invoice-table th, .invoice-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .invoice-table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .invoice-table td:first-child {
+            text-align: left; /* تنظیم چپ‌چین برای ستون شرح فاکتور */
+        }
+        /* تبدیل سایز فیلد شرح فاکتور به اندازه ستون تعداد */
+        .invoice-table td:nth-child(1) {
+            width: 25%; /* می‌توانید اندازه مورد نظر خود را انتخاب کنید */
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <div class="container">
+        <h1>صدور فاکتور</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="id_invoice_number" class="col-sm-3 col-form-label">شماره فاکتور:</label>
+                <div class="col-sm-9">
+                    {{ invoice_form.invoice_number }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_customer_name" class="col-sm-3 col-form-label">نام مشتری:</label>
+                <div class="col-sm-9">
+                    {{ invoice_form.customer_name }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_total_amount" class="col-sm-3 col-form-label">مبلغ کل:</label>
+                <div class="col-sm-9">
+                    {{ invoice_form.total_amount }}
+                </div>
+            </div>
+
+            <h2>شرح فاکتور</h2>
+            <table class="table invoice-table">
+                <thead>
+                    <tr>
+                        <th>شرح فاکتور</th>
+                        <th>تعداد</th>
+                        <th>قیمت واحد</th>
+                        <th>مجموع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ item_formset.management_form }}
+                    {% for form in item_formset %}
+                    <tr>
+                        <td style="text-align: left;">
+                            <select name="{{ form.description.name }}" class="form-control">
+                                {% for product in products %}
+                                    <option value="{{ product.pk }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>{{ form.quantity }}</td>
+                        <td>{{ form.unit_price }}</td>
+                        <td>{{ form.line_total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- اضافه کردن فایل‌های جاوااسکریپت بوت استرپ -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

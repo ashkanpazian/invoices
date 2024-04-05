@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست فاکتورها</title>
+    <!-- استایل‌ها و لینک‌های مورد نیاز -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: right; /* تنظیم راست‌چین برای متن‌ها */
+        }
+        h1 {
+            color: #333;
+            text-align: right; /* تنظیم راست‌چین برای عنوان */
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .btn-link {
+            color: #007bff;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        .btn-link:hover, .btn-link:focus {
+            color: #0056b3;
+            text-decoration: underline;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <div class="container">
+        <h1>لیست فاکتورها</h1>
+        <!-- دکمه‌های افزودن فاکتور، مشتری و محصول -->
+        <a href="{% url 'add_invoice' %}" class="btn btn-primary">صدور فاکتور جدید</a>
+        <a href="{% url 'customer_list' %}" class="btn btn-danger">لیست مشتری‌ها</a>
+        <a href="{% url 'product_list' %}" class="btn btn-warning">لیست محصولات</a>
+
+        <!-- جدول لیست فاکتورها -->
+        <table class="table table-striped table-bordered mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>شماره فاکتور</th>
+                    <th>تاریخ ایجاد</th>
+                    <th>نام مشتری</th>
+                    <th>مبلغ کل</th>
+                    <!-- ستون‌های دیگر به تفکیک فاکتورهای دیگر -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- اطلاعات فاکتورها -->
+                {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td>{{ invoice.date_created }}</td>
+                    <td>{{ invoice.customer_name }}</td>
+                    <td>{{ invoice.total_amount }}</td>
+                    <!-- ستون‌های دیگر به تفکیک هر فاکتور -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- اسکریپت‌ها -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

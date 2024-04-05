@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست مشتری‌ها</title>
+    <!-- اضافه کردن فایل‌های CSS بوت استرپ -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* استایل‌های خاص شما */
+    </style>
+</head>
+<body dir="rtl">
+    <div class="container">
+        <h1>لیست مشتری‌ها</h1>
+    <a href="{% url 'add_customer' %}" class="btn btn-primary">افزودن مشتری جدید</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>نام</th>
+                    <th>نام خانوادگی</th>
+                    <th>شماره تلفن</th>
+                    <th>آدرس</th>
+                    <th>تلفن</th>
+                    <th>کد اقتصادی</th>
+                    <th>شناسه ملی</th>
+                    <th>کد پستی</th>
+                    <th>نام فروشگاه</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- اطلاعات مشتری‌ها -->
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.first_name }}</td>
+                    <td>{{ customer.last_name }}</td>
+                    <td>{{ customer.phone_number }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.telephone }}</td>
+                    <td>{{ customer.economic_code }}</td>
+                    <td>{{ customer.national_id }}</td>
+                    <td>{{ customer.postal_code }}</td>
+                    <td>{{ customer.store_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
