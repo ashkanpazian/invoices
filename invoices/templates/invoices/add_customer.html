@@ -12,19 +12,34 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
             padding: 20px;
+            text-align: right;
         }
         h1 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
-        form {
+        .container {
             max-width: 600px;
             margin: auto;
+        }
+        form {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        form input[type="text"], form input[type="number"], form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
         }
         form button[type="submit"] {
             padding: 10px 20px;
@@ -34,19 +49,59 @@
             color: #fff;
             border-radius: 5px;
             cursor: pointer;
+            display: block;
+            margin: auto;
         }
         form button[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .link-button {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
-<body dir="rtl">
+<body dir="ltr">
 
     <h1>افزودن مشتری جدید</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">ذخیره</button>
-    </form>
+    <div class="link-button">
+        <a href="{% url 'invoice_list' %}" class="btn btn-danger">بازگشت به لیست فاکتور</a>
+        <a href="{% url 'customer_list' %}" class="btn btn-primary">لیست مشتری</a>
+    </div>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group" dir="ltr">
+                <label for="id_first_name">نام مشتری:</label>
+                {{ form.full_name }}
+            </div>
+            <div class="form-group">
+                <label for="id_phone_number">شماره تلفن:</label>
+                {{ form.phone_number }}
+            </div>
+            <div class="form-group">
+                <label for="id_address">آدرس:</label>
+                {{ form.address }}
+            </div>
+            <div class="form-group" >
+                <label for="id_economic_code">کد اقتصادی:</label>
+                {{ form.economic_code }}
+            </div>
+            <div class="form-group">
+                <label for="id_national_id">شناسه ملی:</label>
+                {{ form.national_id }}
+            </div>
+            <div class="form-group">
+                <label for="id_postal_code">کد پستی:</label>
+                {{ form.postal_code }}
+            </div>
+            <div class="form-group">
+                <label for="id_store_name">نام فروشگاه:</label>
+                {{ form.store_name }}
+            </div>
+            <button type="submit" class="btn btn-primary">ذخیره</button>
+        </form>
+    </div>
 </body>
 </html>

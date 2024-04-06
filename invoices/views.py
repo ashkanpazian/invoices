@@ -3,6 +3,10 @@ from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Invoice, InvoiceItem ,Customer,Product
 from .forms import InvoiceForm, InvoiceItemForm, CustomerForm,ProductForm
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from .forms import CustomerForm
+
 
 InvoiceItemFormSet = modelformset_factory(InvoiceItem, fields=('description', 'quantity', 'unit_price'))
 
@@ -12,15 +16,13 @@ def invoice_list(request):
     return render(request, 'invoices/invoice_list.html', {'invoices': invoices})
 
 
-InvoiceItemFormSet = modelformset_factory(InvoiceItem, fields=('description', 'quantity', 'unit_price'))
-
 def add_invoice(request):
     if request.method == 'POST':
         invoice_form = InvoiceForm(request.POST)
         customer_form = CustomerForm(request.POST)
         item_formset = InvoiceItemFormSet(request.POST)
-
         if invoice_form.is_valid() and customer_form.is_valid() and item_formset.is_valid():
+            print(invoice_form)
             customer = customer_form.save()  # Save customer information
             invoice = invoice_form.save(commit=False)
             invoice.customer_name = customer.full_name  # Set customer name in invoice
@@ -43,17 +45,13 @@ def invoice_detail(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id)
     return render(request, 'invoices/invoice_detail.html', {'invoice': invoice})
 
-# views.py
-
-from django.shortcuts import render, redirect
-from .forms import CustomerForm
 
 def add_customer(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('invoice_list')  # مثلاً به لیست فاکتورها هدایت شود
+            return redirect('customer_list')  # مثلاً به لیست فاکتورها هدایت شود
     else:
         form = CustomerForm()
     return render(request, 'invoices/add_customer.html', {'form': form})
@@ -69,12 +67,19 @@ def add_product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('invoice_list')  # یا هر صفحه دیگری که باید به آن منتقل شود
+            return redirect('product_list')  # یا هر صفحه دیگری که باید به آن منتقل شود
     else:
         form = ProductForm()
 
     return render(request, 'invoices/add_product.html', {'form': form})
 
+
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'invoices/product_list.html', {'products': products})
+
+
+def get_products(request):
+    products = Product.objects.all()
+    data = [{'id': product.id, 'name': product.name} for product in products]
+    return JsonResponse({'products': data})
